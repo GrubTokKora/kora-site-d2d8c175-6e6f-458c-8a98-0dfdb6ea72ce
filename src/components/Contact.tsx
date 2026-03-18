@@ -26,7 +26,7 @@ function Contact({ address, businessId }: ContactProps) {
   const recaptchaRef = useRef<HTMLDivElement>(null);
   const recaptchaWidgetId = useRef<number | null>(null);
 
-  const recaptchaSiteKey = window.KORA_CONFIG?.recaptchaSiteKey || '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'; // Fallback to a test key
+  const recaptchaSiteKey = window.KORA_CONFIG?.recaptchaSiteKey || '6LfRt44sAAAAACVTvFvGjoufmEcZqZk_pT4T_5Xd'; // Fallback to a test key
 
   useEffect(() => {
     if (window.grecaptcha && recaptchaRef.current) {
