@@ -20,9 +20,6 @@ export type NewsletterSubscribeResult = {
   channels?: string[]
 }
 
-// Base URL for the public API. Hardcoded to dev environment for now.
-// const API_BASE_URL = 'https://kora-agent.quseappdev.com/api'
-
 function getApiBaseUrl(): string {
   // Prefer a dynamically injected base URL from the hosting environment, if present.
   if (typeof window !== 'undefined') {
@@ -73,30 +70,37 @@ export async function subscribeToNewsletter(
 
   const apiBaseUrl = getApiBaseUrl()
 
-  const resp = await fetch(`${apiBaseUrl}/api/v1/public/newsletter/subscribe`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  })
+  try {
+    const resp = await fetch(`${apiBaseUrl}/api/v1/public/newsletter/subscribe`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
 
-  if (!resp.ok) {
+    const json = (await resp.json()) as any;
+
+    if (!resp.ok) {
+      return {
+        success: false,
+        status: 'error',
+        message: json.message || 'Failed to subscribe to newsletter.',
+      }
+    }
+
+    return {
+      success: true,
+      status: json.status ?? 'subscribed',
+      message: json.message ?? 'Subscribed to newsletter.',
+      subscriberId: json.subscriber_id ?? json.id ?? undefined,
+      channels: json.channels ?? undefined,
+    }
+  } catch (error) {
     return {
       success: false,
       status: 'error',
-      message: 'Failed to subscribe to newsletter.',
+      message: 'An unexpected error occurred.',
     }
   }
-
-  const json = (await resp.json()) as any
-
-  return {
-    success: true,
-    status: json.status ?? 'subscribed',
-    message: json.message ?? 'Subscribed to newsletter.',
-    subscriberId: json.subscriber_id ?? json.id ?? undefined,
-    channels: json.channels ?? undefined,
-  }
 }
-
