@@ -24,7 +24,7 @@ function App() {
         <About description={businessDetails.description} />
         <Menu cuisine={businessDetails.cuisine} />
         <Gallery />
-        <Contact address={businessDetails.address} businessId={BUSINESS_ID} />
+        <Contact address={businessDetails.address} />
       </main>
       <Footer businessId={BUSINESS_ID} />
     </>
