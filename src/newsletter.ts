@@ -20,20 +20,7 @@ export type NewsletterSubscribeResult = {
   channels?: string[]
 }
 
-function getApiBaseUrl(): string {
-  // Prefer a dynamically injected base URL from the hosting environment, if present.
-  if (typeof window !== 'undefined') {
-    const maybeConfig = (window as any).KORA_CONFIG
-    const configured = typeof maybeConfig?.apiBaseUrl === 'string' ? maybeConfig.apiBaseUrl.trim() : ''
-    if (configured) {
-      return configured.replace(/\/+$/, '')
-    }
-  }
-
-  // Fallback to the default dev/staging backend host.
-  // This should point at the correct environment-specific API gateway without the /api suffix.
-  return 'https://kora-agent.quseappdev.com'
-}
+import { getApiBaseUrl } from './config';
 
 export async function subscribeToNewsletter(
   payload: NewsletterSubscribePayload,
