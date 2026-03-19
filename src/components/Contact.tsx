@@ -2,14 +2,20 @@ import { useState, useRef, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { getApiBaseUrl, getRecaptchaSiteKey } from '../config';
 
+import type { FormEvent } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { getApiBaseUrl, getRecaptchaSiteKey } from '../config';
+
 type ContactProps = {
   address: string;
+  phone: string;
+  email: string;
   businessId: string;
 };
 
 type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
-function Contact({ address, businessId }: ContactProps) {
+function Contact({ address, phone, email, businessId }: ContactProps) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -99,9 +105,9 @@ function Contact({ address, businessId }: ContactProps) {
             <h3>Visit Us</h3>
             <p>{address}</p>
             <h3>Call Us</h3>
-            <p>Phone: (123) 456-7890</p>
+            <p>Phone: {phone}</p>
             <h3>Email Us</h3>
-            <p>Email: contact@terracottarestaurant.com</p>
+            <p>Email: {email}</p>
           </div>
           <div className="contact-form-container">
             <h3>Send a Message</h3>

@@ -5,26 +5,27 @@ import Menu from './components/Menu';
 import Gallery from './components/Gallery';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import { siteData } from './data';
 
 export const BUSINESS_ID = "d2d8c175-6e6f-458c-8a98-0dfdb6ea72ce";
-
-const businessDetails = {
-  name: "Terracotta Multicuisine Restaurant & Banquet",
-  description: "Polished venture serving Indian, Asian & Italian specialities, plus fusion dishes & Mexican plates.",
-  address: "2, Pramukh Arcade, Gandhinagar Gujarat",
-  cuisine: ["Indian", "Chinese", "Continental"],
-};
+export const RECAPTCHA_SITE_KEY = "6LfRt44sAAAAACVTvFvGjoufmEcZqZk_pT4T_5Xd";
+export const API_BASE_URL = "https://kora-agent.quseappdev.com";
 
 function App() {
   return (
     <>
-      <Header businessName={businessDetails.name} />
+      <Header businessName={siteData.business.name} />
       <main>
-        <Hero title={businessDetails.name} subtitle={businessDetails.description} />
-        <About description={businessDetails.description} />
-        <Menu cuisine={businessDetails.cuisine} />
+        <Hero title={siteData.business.name} subtitle={siteData.business.description} />
+        <About description={siteData.business.description} />
+        <Menu cuisine={siteData.menu.cuisine} />
         <Gallery />
-        <Contact address={businessDetails.address} businessId={BUSINESS_ID} />
+        <Contact 
+          address={siteData.business.address} 
+          phone={siteData.contact.phone}
+          email={siteData.contact.email}
+          businessId={BUSINESS_ID} 
+        />
       </main>
       <Footer businessId={BUSINESS_ID} />
     </>

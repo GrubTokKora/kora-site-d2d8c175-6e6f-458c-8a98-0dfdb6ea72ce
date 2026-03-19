@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App, { BUSINESS_ID } from './App.tsx'
+import App, { BUSINESS_ID, API_BASE_URL, RECAPTCHA_SITE_KEY } from './App.tsx'
 
 declare global {
   interface Window {
@@ -18,6 +18,10 @@ declare global {
 // Expose stable globals for any runtime code that needs them.
 window.KORA_SITE = {
   businessId: BUSINESS_ID,
+}
+window.KORA_CONFIG = {
+  apiBaseUrl: API_BASE_URL,
+  recaptchaSiteKey: RECAPTCHA_SITE_KEY,
 }
 
 const rootEl = document.getElementById('root')
