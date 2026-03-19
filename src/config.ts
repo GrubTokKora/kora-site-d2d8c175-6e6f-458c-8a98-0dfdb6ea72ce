@@ -18,3 +18,20 @@ export function getApiBaseUrl(): string {
   return 'https://kora-agent.quseappdev.com';
 }
 
+/**
+ * Retrieves the reCAPTCHA v2 site key.
+ * Falls back to a placeholder if not provided.
+ */
+export function getRecaptchaSiteKey(): string {
+  if (typeof window !== 'undefined') {
+    const maybeConfig = (window as any).KORA_CONFIG;
+    const configured = typeof maybeConfig?.recaptchaSiteKey === 'string' ? maybeConfig.recaptchaSiteKey.trim() : '';
+    if (configured) {
+      return configured;
+    }
+  }
+  // A placeholder key for local development.
+  // This key will show a warning but is usable for testing.
+  return '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
+}
+
