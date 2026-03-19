@@ -2,10 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { getApiBaseUrl, getRecaptchaSiteKey } from '../config';
 
-import type { FormEvent } from 'react';
-import { useState, useRef, useEffect } from 'react';
-import { getApiBaseUrl, getRecaptchaSiteKey } from '../config';
-
 type ContactProps = {
   address: string;
   phone: string;
@@ -17,7 +13,7 @@ type FormStatus = 'idle' | 'submitting' | 'success' | 'error';
 
 function Contact({ address, phone, email, businessId }: ContactProps) {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [formEmail, setFormEmail] = useState('');
   const [message, setMessage] = useState('');
   const [status, setStatus] = useState<FormStatus>('idle');
   const [formMessage, setFormMessage] = useState('');
@@ -29,7 +25,7 @@ function Contact({ address, phone, email, businessId }: ContactProps) {
   const recaptchaSiteKey = getRecaptchaSiteKey();
 
   useEffect(() => {
-    if (window.grecaptcha && window.grecaptcha.render && recaptchaContainer.current && !recaptchaWidgetId.current) {
+    if (window.grecaptcha && window.grecaptcha.render && recaptchaContainer.current && recaptchaWidgetId.current === null) {
       recaptchaWidgetId.current = window.grecaptcha.render(recaptchaContainer.current, {
         sitekey: recaptchaSiteKey,
       });
@@ -39,9 +35,9 @@ function Contact({ address, phone, email, businessId }: ContactProps) {
   const validateForm = () => {
     const newErrors: { name?: string; email?: string; message?: string; captcha?: string } = {};
     if (!name.trim()) newErrors.name = 'Full name is required.';
-    if (!email.trim()) {
+    if (!formEmail.trim()) {
       newErrors.email = 'Email is required.';
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
+    } else if (!/\S+@\S+\.\S+/.test(formEmail)) {
       newErrors.email = 'Email is invalid.';
     }
     if (!message.trim()) newErrors.message = 'Message is required.';
@@ -74,8 +70,8 @@ function Contact({ address, phone, email, businessId }: ContactProps) {
         body: JSON.stringify({
           business_id: businessId,
           form_type: 'contact',
-          form_data: { name, email, message },
-          submitter_email: email,
+          form_data: { name, email: formEmail, message },
+          submitter_email: formEmail,
           captcha_token: token,
         }),
       });
@@ -87,7 +83,7 @@ function Contact({ address, phone, email, businessId }: ContactProps) {
       setStatus('success');
       setFormMessage('Thank you for your message! We will get back to you soon.');
       setName('');
-      setEmail('');
+      setFormEmail('');
       setMessage('');
       window.grecaptcha.reset(recaptchaWidgetId.current ?? undefined);
     } catch (error) {
@@ -128,8 +124,8 @@ function Contact({ address, phone, email, businessId }: ContactProps) {
                 <input
                   type="email"
                   id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formEmail}
+                  onChange={(e) => setFormEmail(e.target.value)}
                   required
                 />
                 {errors.email && <p className="error-text">{errors.email}</p>}
